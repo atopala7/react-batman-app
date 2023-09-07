@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import "./App.css";
+
+const App = () => {
+    const name = "Ani";
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        setCount(100);
+    }, []); // When the dependencies array is empty, the useEffect hook only activates upon the component's creation
+
+    return (
+        <div className="App">
+            <h1>Hello, {name}!</h1>
+            <button
+                onClick={() => {
+                    setCount((prevCount) => prevCount - 1);
+                }}
+            >
+                -
+            </button>
+            <span> {count} </span>
+            <button
+                onClick={() => {
+                    setCount((prevCount) => prevCount + 1);
+                }}
+            >
+                +
+            </button>
+        </div>
+    );
+};
 
 export default App;
