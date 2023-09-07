@@ -3,26 +3,18 @@ import { useEffect, useState } from "react";
 import MovieCard from "./components/MovieCard";
 
 import "./App.css";
-import SearchIcon from "./search.svg";
 
 const apiKey = "f43e28bf";
 
 const API_URL = `http://www.omdbapi.com?apikey=${apiKey}`;
-
-const movie1 = {
-    Title: "Spiderman",
-    Year: "1990",
-    imdbID: "tt0100669",
-    Type: "movie",
-    Poster: "N/A"
-};
 
 const App = () => {
     const [movies, setMovies] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
     const searchMovies = async (title) => {
-        const response = await fetch(`${API_URL}&s=${title}`);
+        console.log(`Searching for ${title}`);
+        const response = await fetch(`${API_URL}&s=${title}*`);
         const data = await response.json();
 
         console.log(data.Search);
@@ -41,25 +33,31 @@ const App = () => {
                 <input
                     placeholder="Search for movies"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <img
-                    src={SearchIcon}
-                    alt="Search"
-                    onClick={() => searchMovies(searchTerm)}
+                    onChange={(e) => {
+                        searchMovies(e.target.value);
+                        setSearchTerm(e.target.value);
+                    }}
                 />
             </div>
 
             {movies?.length > 0 ? (
                 <div className="container">
                     {movies.map((movie) => (
-                        <MovieCard movie={movie} key={movie.imdbID} />
+                        <a
+                            href={`http://imdb.com/title/${movie.imdbID}`}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                        >
+                            <MovieCard movie={movie} key={movie.imdbID} />
+                        </a>
                     ))}
                 </div>
-            ) : (
+            ) : searchTerm.length >= 3 ? (
                 <div className="empty">
                     <h2>No movies found</h2>
                 </div>
+            ) : (
+                ""
             )}
         </div>
     );
